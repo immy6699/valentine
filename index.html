@@ -8,32 +8,40 @@
       font-family: 'Arial', sans-serif;
       background: linear-gradient(135deg, #ff758c, #ff7eb3);
       height: 100vh;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0;
-      color: #fff;
-      text-align: center;
+      color: white;
+      overflow: hidden;
     }
 
     .card {
       background: rgba(255, 255, 255, 0.15);
       padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      text-align: center;
       position: relative;
-      width: 320px;
+      width: 360px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      z-index: 2;
     }
 
     h1 {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 25px;
     }
 
     button {
       font-size: 18px;
-      padding: 12px 24px;
+      padding: 14px 28px;
       border: none;
-      border-radius: 25px;
+      border-radius: 30px;
       cursor: pointer;
       margin: 10px;
     }
@@ -41,6 +49,8 @@
     #yesBtn {
       background-color: #28e0a9;
       color: #333;
+      font-size: 22px;
+      padding: 16px 36px;
     }
 
     #noBtn {
@@ -48,38 +58,106 @@
       color: white;
       position: absolute;
     }
+
+    .details {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      color: rgba(255,255,255,0.8);
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-110vh); opacity: 0; }
+    }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <h1>Will you be my Valentine? 💘</h1>
+    <h1>Will you be my Valentine, <span id="name"></span>? 💘</h1>
+
+    <p>
+      I know it’s been <strong>2 years</strong> since we first met,  
+      and somehow time has only made this feel more special.  
+      Maybe the waiting game wasn’t a delay… maybe it was just  
+      making this moment more beautiful. 💕
+    </p>
+
+    <div class="details">
+      📅 <strong>24 April</strong><br>
+      📍 <strong>Dubai Marina Beach</strong>
+    </div>
+
     <button id="yesBtn" onclick="yesClicked()">Yes 💖</button>
     <button id="noBtn">No 😅</button>
   </div>
 
-  <script>
-    const noBtn = document.getElementById("noBtn");
+  <!-- Background music -->
+  <audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 
+  <script>
+    // ❤️ PERSONAL DETAILS
+    const herName = "Tanishka";
+    const whatsappNumber = "919521871917"; // 👈 replace with your WhatsApp number (with country code)
+
+    document.getElementById("name").textContent = herName;
+
+    const noBtn = document.getElementById("noBtn");
+    const music = document.getElementById("music");
+
+    // No button runs away
     noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * 200;
-      const y = Math.random() * 200;
+      const x = Math.random() * 260;
+      const y = Math.random() * 220;
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
     });
 
+    // Play music on first click
+    document.body.addEventListener("click", () => {
+      music.play().catch(() => {});
+    }, { once: true });
+
+    // YES clicked
     function yesClicked() {
       document.body.innerHTML = `
-        <h1 style="color:white;">
-          Yayyy! 💕<br><br>
-          I knew you'd say YES 😍<br><br>
-          Happy Valentine’s Day 🌹
+        <h1 style="text-align:center;">
+          Yayyy ${herName}! 💕<br><br>
+          24 April is officially ours 🌹<br>
+          Dubai Marina Beach awaits us 🌊✨<br><br>
+          I can’t wait to make memories with you ❤️
         </h1>
       `;
+
+      setTimeout(() => {
+        const msg = encodeURIComponent(
+          "She said YES 💖\n24 April | Dubai Marina Beach 🌊\nCan’t wait ❤️"
+        );
+        window.location.href = `https://wa.me/${whatsappNumber}?text=${msg}`;
+      }, 3500);
     }
+
+    // Floating hearts
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 22 + 14 + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 6000);
+    }, 400);
   </script>
 
 </body>
 </html>
-<!-- Valentine site -->
-
